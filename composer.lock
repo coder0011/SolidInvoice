@@ -9571,22 +9571,22 @@
         },
         {
             "name": "symfony/firebase-notifier",
-            "version": "v7.1.6",
+            "version": "v7.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/firebase-notifier.git",
-                "reference": "d72032b9185c3c2e5a2112c9d492dc25c5b779e7"
+                "reference": "b993cef339b685308a8427f463fe2a74ac90b98b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/firebase-notifier/zipball/d72032b9185c3c2e5a2112c9d492dc25c5b779e7",
-                "reference": "d72032b9185c3c2e5a2112c9d492dc25c5b779e7",
+                "url": "https://api.github.com/repos/symfony/firebase-notifier/zipball/b993cef339b685308a8427f463fe2a74ac90b98b",
+                "reference": "b993cef339b685308a8427f463fe2a74ac90b98b",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.2",
                 "symfony/http-client": "^6.4|^7.0",
-                "symfony/notifier": "^6.4|^7.0"
+                "symfony/notifier": "^7.2"
             },
             "type": "symfony-notifier-bridge",
             "autoload": {
@@ -9618,7 +9618,7 @@
                 "notifier"
             ],
             "support": {
-                "source": "https://github.com/symfony/firebase-notifier/tree/v7.1.6"
+                "source": "https://github.com/symfony/firebase-notifier/tree/v7.2.0"
             },
             "funding": [
                 {
@@ -9634,7 +9634,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-09-25T14:20:29+00:00"
+            "time": "2024-09-27T08:38:14+00:00"
         },
         {
             "name": "symfony/flex",
