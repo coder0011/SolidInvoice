@@ -17,9 +17,10 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Ulid;
+use Symfony\Contracts\Service\ResetInterface;
 use function assert;
 
-final class CompanySelector
+final class CompanySelector implements ResetInterface
 {
     private ?Ulid $companyId = null;
 
@@ -45,5 +46,18 @@ final class CompanySelector
             ->setParameter('companyId', $companyId->toHex(), Types::STRING);
 
         $this->companyId = $companyId;
+    }
+
+    public function reset(): void
+    {
+        $em = $this->registry->getManager();
+
+        assert($em instanceof EntityManagerInterface);
+
+        $em
+            ->getFilters()
+            ->disable('company');
+
+        $this->companyId = null;
     }
 }
