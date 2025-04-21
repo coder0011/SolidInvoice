@@ -115,6 +115,9 @@ VOLUME ["/etc/solidinvoice"]
 
 COPY --from=builder /go/src/app/frankenphp/dist/solidinvoice-${TARGETOS}-${TARGETARCH} /usr/local/bin/solidinvoice
 
+# Required for session storage
+RUN mkdir -p /tmp
+
 ENTRYPOINT ["/usr/local/bin/solidinvoice"]
 
 CMD ["run"]
