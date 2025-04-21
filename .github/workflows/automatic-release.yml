@@ -56,9 +56,11 @@ jobs:
       - name: Bump version
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE: 1
         run: "./scripts/bump_version.sh ${{ github.event.milestone.title }}"
 
       - name: Release
         run: "./scripts/create_release.sh ${{ github.event.milestone.title }} ${{ github.repository }}"
         env:
           GH_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
+          RELEASE: 1
