@@ -15,6 +15,33 @@ $_SERVER['APP_RUNTIME_OPTIONS'] = [
 
 require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
 
+if (function_exists('ini_set')) {
+    $memoryInBytes = static function ($value) {
+        $unit = strtolower(substr($value, -1, 1));
+        $value = (int) $value;
+        switch($unit) {
+            case 'g':
+                $value *= 1024;
+            // no break (cumulative multiplier)
+            case 'm':
+                $value *= 1024;
+            // no break (cumulative multiplier)
+            case 'k':
+                $value *= 1024;
+        }
+
+        return $value;
+    };
+
+    $memoryLimit = trim(ini_get('memory_limit'));
+
+    // Increase memory_limit if it is lower than 256MB
+    if ($memoryLimit != -1 && $memoryInBytes($memoryLimit) < (1024 * 1024 * 256)) {
+        @ini_set('memory_limit', '256M');
+    }
+    unset($memoryInBytes);
+}
+
 return static function (array $context) {
     $kernel = new Kernel($context['SOLIDINVOICE_ENV'], (bool) $context['SOLIDINVOICE_DEBUG']);
 
