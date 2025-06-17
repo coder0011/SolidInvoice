@@ -272,6 +272,24 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/MailerBundle/Configurator/SesConfigurator.php',
 ];
 $ignoreErrors[] = [
+	// identifier: class.extendsFinalByPhpDoc
+	'message' => '#^Class SolidInvoice\\\\MenuBundle\\\\Factory extends @final class Knp\\\\Menu\\\\MenuFactory\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/MenuBundle/Factory.php',
+];
+$ignoreErrors[] = [
+	// identifier: class.extendsFinalByPhpDoc
+	'message' => '#^Anonymous class extends @final class Knp\\\\Menu\\\\Matcher\\\\Matcher\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/MenuBundle/Renderer.php',
+];
+$ignoreErrors[] = [
+	// identifier: class.extendsFinalByPhpDoc
+	'message' => '#^Class SolidInvoice\\\\MenuBundle\\\\Renderer extends @final class Knp\\\\Menu\\\\Renderer\\\\ListRenderer\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/MenuBundle/Renderer.php',
+];
+$ignoreErrors[] = [
 	// identifier: missingType.parameter
 	'message' => '#^Method SolidInvoice\\\\MoneyBundle\\\\Calculator\\:\\:calculateDiscount\\(\\) has parameter \\$entity with no type specified\\.$#',
 	'count' => 1,
