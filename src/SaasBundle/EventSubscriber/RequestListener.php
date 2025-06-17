@@ -145,8 +145,8 @@ final readonly class RequestListener implements EventSubscriberInterface
         }
 
         $message = match ($subscription->getStatus()) {
-            SubscriptionStatus::CANCELLED => '<strong>Subscription Canceled</strong> - Your subscription has been canceled. Your access will be revoked on ' . $subscription->getEndDate()->format('Y-m-d H:i:s') . '.<br /><a href="' . $checkoutUrl . '" class="btn btn-default btn-sm">Re-new now<a/> to avoid losing access.',
-            SubscriptionStatus::TRIAL => '<strong>Trial Ending Soon</strong> - Your trial is active until ' . $subscription->getEndDate()->format('Y-m-d H:i:s') . '.<br />Please <a href="' . $checkoutUrl . '" class="btn btn-default btn-sm">activate<a/> your subscription now.',
+            SubscriptionStatus::CANCELLED => '<strong>Subscription Canceled</strong> - Your subscription has been canceled. Your access will be revoked on ' . $subscription->getEndDate()->format('Y-m-d H:i:s') . '.<br /><a href="' . $checkoutUrl . '" class="btn btn-default btn-sm">Renew now</a> to avoid losing access.',
+            SubscriptionStatus::TRIAL => '<strong>Trial Ending Soon</strong> - Your trial is active until ' . $subscription->getEndDate()->format('Y-m-d H:i:s') . '.<br />Please <a href="' . $checkoutUrl . '" class="btn btn-default btn-sm">activate</a> your subscription now.',
         };
 
         $content = str_replace(
