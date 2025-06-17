@@ -500,12 +500,6 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/UserBundle/Action/Security/ChangePassword.php',
 ];
 $ignoreErrors[] = [
-	// identifier: missingType.return
-	'message' => '#^Method SolidInvoice\\\\UserBundle\\\\Action\\\\Security\\\\Login\\:\\:__invoke\\(\\) has no return type specified\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/UserBundle/Action/Security/Login.php',
-];
-$ignoreErrors[] = [
 	// identifier: argument.type
 	'message' => '#^Parameter \\#2 \\$default of method SolidWorx\\\\FormHandler\\\\Options\\:\\:get\\(\\) expects null, string given\\.$#',
 	'count' => 1,

@@ -214,15 +214,19 @@ final class OAuthAuthenticatorTest extends TestCase
             ->with(User::class)
             ->willReturn($this->userRepository);
 
-        // First findOneBy returns null (no user with this OAuth ID)
+        // First findOneBy returns null (no user with this OAuth ID), second returns user
         $this->userRepository
             ->expects($this->exactly(2))
             ->method('findOneBy')
-            ->withConsecutive(
-                [['googleId' => '123456789']],
-                [['email' => 'test@example.com']]
-            )
-            ->willReturnOnConsecutiveCalls(null, $user);
+            ->willReturnCallback(function ($criteria) use ($user) {
+                if (isset($criteria['googleId']) && $criteria['googleId'] === '123456789') {
+                    return null;
+                }
+                if (isset($criteria['email']) && $criteria['email'] === 'test@example.com') {
+                    return $user;
+                }
+                return null;
+            });
 
         // Expect property accessor to set the OAuth ID on the user
         $this->propertyAccessor
@@ -289,11 +293,13 @@ final class OAuthAuthenticatorTest extends TestCase
         $this->userRepository
             ->expects($this->exactly(2))
             ->method('findOneBy')
-            ->withConsecutive(
-                [['googleId' => '123456789']],
-                [['email' => 'test@example.com']]
-            )
-            ->willReturnOnConsecutiveCalls(null, null);
+            ->willReturnCallback(function ($criteria) {
+                if ((isset($criteria['googleId']) && $criteria['googleId'] === '123456789') ||
+                    (isset($criteria['email']) && $criteria['email'] === 'test@example.com')) {
+                    return null;
+                }
+                return null;
+            });
 
         // No current user
         $this->security
@@ -384,11 +390,13 @@ final class OAuthAuthenticatorTest extends TestCase
         $this->userRepository
             ->expects($this->exactly(2))
             ->method('findOneBy')
-            ->withConsecutive(
-                [['googleId' => '123456789']],
-                [['email' => 'test@example.com']]
-            )
-            ->willReturnOnConsecutiveCalls(null, null);
+            ->willReturnCallback(function ($criteria) {
+                if ((isset($criteria['googleId']) && $criteria['googleId'] === '123456789') ||
+                    (isset($criteria['email']) && $criteria['email'] === 'test@example.com')) {
+                    return null;
+                }
+                return null;
+            });
 
         // No current user
         $this->security->expects($this->once())
@@ -453,11 +461,13 @@ final class OAuthAuthenticatorTest extends TestCase
         $this->userRepository
             ->expects($this->exactly(2))
             ->method('findOneBy')
-            ->withConsecutive(
-                [['googleId' => '123456789']],
-                [['email' => 'test@example.com']]
-            )
-            ->willReturnOnConsecutiveCalls(null, null);
+            ->willReturnCallback(function ($criteria) {
+                if ((isset($criteria['googleId']) && $criteria['googleId'] === '123456789') ||
+                    (isset($criteria['email']) && $criteria['email'] === 'test@example.com')) {
+                    return null;
+                }
+                return null;
+            });
 
         // Return current user
         $this->security
