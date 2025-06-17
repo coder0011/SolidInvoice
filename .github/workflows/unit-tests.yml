@@ -66,6 +66,7 @@ jobs:
             optimizationguide-pa.googleapis.com:80
             redirector.gvt1.com:443
             packagist.org:443
+            passwordsleakcheck-pa.googleapis.com
             registry.npmjs.org:443
             registry.yarnpkg.com:443
             release-assets.githubusercontent.com:443
