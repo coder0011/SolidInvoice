@@ -38,7 +38,7 @@ jobs:
 
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@c6295a65d1254861815972266d5933fd6e532bdf
+        uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0
         with:
           egress-policy: block
           allowed-endpoints: >
@@ -50,10 +50,13 @@ jobs:
             bun.sh:443
             chromedriver.storage.googleapis.com:443
             cli.codecov.io:443
+            clients2.google.com:443
             codecov.io:443
             content-autofill.googleapis.com:443
             content-autofill.googleapis.com:80
             coveralls.io:443
+            dl.google.com:443
+            edgedl.me.gvt1.com:443
             github.com:443
             googlechromelabs.github.io:443
             ingest.codecov.io:443
@@ -61,13 +64,16 @@ jobs:
             objects.githubusercontent.com:443
             optimizationguide-pa.googleapis.com:443
             optimizationguide-pa.googleapis.com:80
+            redirector.gvt1.com:443
             packagist.org:443
             registry.npmjs.org:443
             registry.yarnpkg.com:443
+            release-assets.githubusercontent.com:443
             repo.packagist.org:443
             storage.googleapis.com:443
             update.googleapis.com:80
             uploader.codecov.io:443
+            www.google.com:443
 
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -87,7 +93,7 @@ jobs:
           extensions: intl, gd, opcache, mysql, pdo_mysql, soap, zip, :xdebug
           coverage: ${{ steps.coverage_driver.outputs.value }}
 
-      - uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # v2
+      - uses: oven-sh/setup-bun@735343b667d3e6f658f44d0eca948eb6282f2b76 # v2
 
       - uses: ramsey/composer-install@e52779489de843a9f022c7b8faa648b608b02c70 # v3
 

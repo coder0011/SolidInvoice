@@ -11,7 +11,11 @@ variable "PHP_VERSION" {
 }
 
 variable "LATEST" {
-    default = true
+    default = false
+}
+
+variable "NIGHTLY" {
+    default = false
 }
 
 variable "RELEASE" {
@@ -63,15 +67,18 @@ target "build-static" {
         //"linux/arm/v6",
         //"linux/arm/v7",
     ]
-    tags = distinct(flatten([
+    tags = compact(distinct(flatten([
             LATEST ? "${IMAGE_NAME}:latest" : "",
+            NIGHTLY ? "${IMAGE_NAME}:nightly" : "",
             SOLIDINVOICE_VERSION == "2.4.x" ? [] : [for v in semver(SOLIDINVOICE_VERSION) : "${IMAGE_NAME}:${v}"]
-    ]))
+    ])))
     args = {
         SOLIDINVOICE_VERSION = "${SOLIDINVOICE_VERSION}"
         PHP_VERSION = "${PHP_VERSION}"
         RELEASE = "${RELEASE}"
         NO_COMPRESS = "${NO_COMPRESS}"
+        LATEST = "${LATEST}"
+        NIGHTLY = "${NIGHTLY}"
     }
     secret = ["id=github-token,env=GITHUB_TOKEN"]
 }

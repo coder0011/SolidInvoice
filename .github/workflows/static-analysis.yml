@@ -14,13 +14,11 @@ jobs:
 
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@c6295a65d1254861815972266d5933fd6e532bdf
+        uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0
         with:
           egress-policy: block
           allowed-endpoints: >
-            185.125.188.54:443
-            185.125.188.55:443
-            185.125.188.59:443
+            api.snapcraft.io:443
             api.codecov.io:443
             api.github.com:443
             api.launchpad.net:443
@@ -28,8 +26,10 @@ jobs:
             azure.archive.ubuntu.com:80
             bun.sh:443
             codecov.io:443
+            dl.cloudsmith.io:443
             esm.ubuntu.com:443
             esm.ubuntu.com:80
+            getcomposer.org:443
             github.com:443
             keys.openpgp.org:443
             keyserver.ubuntu.com:443
@@ -46,6 +46,7 @@ jobs:
             ppa.launchpadcontent.net:80
             registry.npmjs.org:443
             registry.yarnpkg.com:443
+            release-assets.githubusercontent.com:443
             repo.packagist.org:443
             security.ubuntu.com:443
             security.ubuntu.com:80
@@ -63,7 +64,7 @@ jobs:
 
       - uses: ramsey/composer-install@e52779489de843a9f022c7b8faa648b608b02c70 # v3
 
-      - uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # v2
+      - uses: oven-sh/setup-bun@735343b667d3e6f658f44d0eca948eb6282f2b76 # v2
 
       - run: bun install
 
