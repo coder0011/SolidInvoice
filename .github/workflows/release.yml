@@ -32,6 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       ref: ${{ steps.check.outputs.ref }}
+      release: ${{ steps.check.outputs.release }}
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@002fdce3c6a235733a90a27c80493a3241e56863 # v2.12.1
@@ -46,6 +47,13 @@ jobs:
             ref="$(gh release view --repo solidinvoice/solidinvoice --json tagName --jq '.tagName')"
           fi
           echo "ref=${ref}" >> "${GITHUB_OUTPUT}"
+
+          if [[ "${{ github.event_name }}" == "push" && "${{ startsWith(github.ref, 'refs/tags/') }}" == "true" ]]; then
+            echo "release=1" >> "${GITHUB_OUTPUT}"
+          else
+            release_flag="${{ github.event.inputs.release == 'true' && '1' || '0' }}"
+            echo "release=${release_flag}" >> "${GITHUB_OUTPUT}"
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -76,7 +84,7 @@ jobs:
       - name: Build Release Artifact
         run: "./scripts/build_dist.sh ${{ needs.prepare.outputs.ref }} ${{ needs.prepare.outputs.ref }}"
         env:
-          RELEASE: ${{ inputs.release && '1' || '0' }}
+          RELEASE: ${{ needs.prepare.outputs.release }}
           GH_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
 
       - name: Upload TAR archive
@@ -146,7 +154,7 @@ jobs:
           # GITHUB_TOKEN is used by static-php-cli script to make api calls to Github
           GH_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
-          RELEASE: ${{ inputs.release && '1' || '0' }}
+          RELEASE: ${{ needs.prepare.outputs.release }}
 
       - name: Save static-php cache
         if: steps.restore-static-php.outputs.cache-hit != 'true'
@@ -154,7 +162,6 @@ jobs:
         with:
           path: frankenphp/dist/static-php-cli
           key: ${{ matrix.os }}-${{ matrix.platform }}-static-php-cli-${{ hashFiles('frankenphp/dist/static-php-cli/cache_key') }}
-
 
   build-linux:
     name: Build binaries
@@ -203,7 +210,7 @@ jobs:
         with:
             targets: build-static
             source: .
-            push: ${{ inputs.release }}
+            push: ${{ needs.prepare.outputs.release == '1' }}
             set: |
                 build-static.cache-from=type=gha,scope=php
                 build-static.cache-to=type=gha,scope=php,mode=max,ignore-error=true
@@ -213,6 +220,5 @@ jobs:
           # GITHUB_TOKEN is used by static-php-cli script to make api calls to Github
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE: ${{ inputs.release && '1' || '0' }}
-          LATEST:  ${{ inputs.release && '1' || '0' }}
+          RELEASE: ${{ needs.prepare.outputs.release }}
           SOLIDINVOICE_VERSION: ${{ needs.prepare.outputs.ref }}

@@ -61,11 +61,13 @@ jobs:
             googlechromelabs.github.io:443
             ingest.codecov.io:443
             keybase.io:443
+            o26192.ingest.us.sentry.io
             objects.githubusercontent.com:443
             optimizationguide-pa.googleapis.com:443
             optimizationguide-pa.googleapis.com:80
             redirector.gvt1.com:443
             packagist.org:443
+            passwordsleakcheck-pa.googleapis.com
             registry.npmjs.org:443
             registry.yarnpkg.com:443
             release-assets.githubusercontent.com:443

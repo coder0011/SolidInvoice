@@ -158,12 +158,6 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/CoreBundle/Templating/Template.php',
 ];
 $ignoreErrors[] = [
-	// identifier: assign.propertyType
-	'message' => '#^Property SolidInvoice\\\\CoreBundle\\\\Tests\\\\KernelAwareTest\\:\\:\\$container \\(Symfony\\\\Component\\\\DependencyInjection\\\\Container\\) does not accept Symfony\\\\Component\\\\DependencyInjection\\\\ContainerInterface\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/CoreBundle/Tests/KernelAwareTest.php',
-];
-$ignoreErrors[] = [
 	// identifier: missingType.iterableValue
 	'message' => '#^Method SolidInvoice\\\\DashboardBundle\\\\Widgets\\\\RecentClientsWidget\\:\\:getData\\(\\) return type has no value type specified in iterable type array\\.$#',
 	'count' => 1,
@@ -276,6 +270,24 @@ $ignoreErrors[] = [
 	'message' => '#^Method SolidInvoice\\\\MailerBundle\\\\Configurator\\\\SesConfigurator\\:\\:configure\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/MailerBundle/Configurator/SesConfigurator.php',
+];
+$ignoreErrors[] = [
+	// identifier: class.extendsFinalByPhpDoc
+	'message' => '#^Class SolidInvoice\\\\MenuBundle\\\\Factory extends @final class Knp\\\\Menu\\\\MenuFactory\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/MenuBundle/Factory.php',
+];
+$ignoreErrors[] = [
+	// identifier: class.extendsFinalByPhpDoc
+	'message' => '#^Anonymous class extends @final class Knp\\\\Menu\\\\Matcher\\\\Matcher\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/MenuBundle/Renderer.php',
+];
+$ignoreErrors[] = [
+	// identifier: class.extendsFinalByPhpDoc
+	'message' => '#^Class SolidInvoice\\\\MenuBundle\\\\Renderer extends @final class Knp\\\\Menu\\\\Renderer\\\\ListRenderer\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/MenuBundle/Renderer.php',
 ];
 $ignoreErrors[] = [
 	// identifier: missingType.parameter

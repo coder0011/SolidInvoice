@@ -36,7 +36,8 @@ final class CompanyEventSubscriber implements EventSubscriberInterface
     public function __construct(
         private readonly RouterInterface $router,
         private readonly CompanySelector $companySelector,
-        private readonly Security $security
+        private readonly Security $security,
+        private readonly ?string $installed = null,
     ) {
     }
 
@@ -51,7 +52,7 @@ final class CompanyEventSubscriber implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        if (! $event->isMainRequest() || $request->attributes->get('_stateless')) {
+        if (null === $this->installed || ! $event->isMainRequest() || $request->attributes->get('_stateless')) {
             return;
         }
 

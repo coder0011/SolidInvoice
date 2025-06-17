@@ -13,45 +13,45 @@ declare(strict_types=1);
 
 namespace SolidInvoice\UserBundle\Action;
 
-use Generator;
-use SolidInvoice\CoreBundle\Response\FlashResponse;
+use SolidInvoice\CoreBundle\Entity\Company;
+use SolidInvoice\UserBundle\DTO\Registration;
+use SolidInvoice\UserBundle\Entity\User;
 use SolidInvoice\UserBundle\Entity\UserInvitation;
 use SolidInvoice\UserBundle\Form\Type\RegisterType;
 use SolidInvoice\UserBundle\Repository\UserInvitationRepository;
 use SolidInvoice\UserBundle\Repository\UserRepository;
 use SolidWorx\Toggler\ToggleInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Uid\Ulid;
+use function assert;
 
 final class Register extends AbstractController
 {
     public function __construct(
-        private readonly UserInvitationRepository $userInvitationRepository,
-        private readonly UserRepository $userRepository,
         private readonly UserPasswordHasherInterface $userPasswordHasher,
-        private readonly RouterInterface $router,
-        private readonly ToggleInterface $toggle,
+        private readonly UserInvitationRepository $invitationRepository,
+        private readonly UserRepository $userRepository,
+        private readonly Security $security,
     ) {
     }
 
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request, ToggleInterface $toggle): Response
     {
         $invitation = null;
 
         if ($request->query->has('invitation')) {
-            $invitation = $this->userInvitationRepository->find(Ulid::fromString($request->query->get('invitation')));
+            $invitation = $this->invitationRepository->find(Ulid::fromString($request->query->get('invitation')));
 
             if (! $invitation instanceof UserInvitation) {
                 throw $this->createNotFoundException('Invitation is not valid');
             }
         }
 
-        if (! $request->query->has('invitation') && ! $this->toggle->isActive('allow_registration')) {
+        if (! $request->query->has('invitation') && ! $toggle->isActive('allow_registration')) {
             throw $this->createNotFoundException('Registration is disabled');
         }
 
@@ -63,7 +63,20 @@ final class Register extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $form->getData();
+            $data = $form->getData();
+            assert($data instanceof Registration);
+
+            $user = new User();
+
+            if ($invitation instanceof UserInvitation) {
+                $user->setEmail($invitation->getEmail());
+                $user->addCompany($invitation->getCompany());
+            } else {
+                $user->setEmail($data->email);
+                $company = (new Company())->setName($data->company);
+                $company->currency = 'USD'; // @TODO: Make this configurable, or get the currency from registration
+                $user->addCompany($company);
+            }
 
             if ($invitation instanceof UserInvitation) {
                 $user->setEmail($invitation->getEmail());
@@ -76,24 +89,12 @@ final class Register extends AbstractController
             $this->userRepository->save($user);
 
             if ($invitation instanceof UserInvitation) {
-                $this->userInvitationRepository->delete($invitation);
+                $this->invitationRepository->delete($invitation);
             }
 
-            $route = $this->router->generate('_login');
-
-            return new class($route) extends RedirectResponse implements FlashResponse {
-                public function getFlash(): Generator
-                {
-                    yield self::FLASH_SUCCESS => 'security.register.success';
-                }
-            };
+            return $this->security->login($user, 'security.authenticator.form_login.main', 'main');
         }
 
-        return $this->render(
-            '@SolidInvoiceUser/Security/register.html.twig',
-            [
-                'form' => $form,
-            ]
-        );
+        return $this->render('@SolidInvoiceUser/Security/register.html.twig', ['form' => $form]);
     }
 }
