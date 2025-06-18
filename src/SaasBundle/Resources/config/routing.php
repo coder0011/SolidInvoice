@@ -16,6 +16,10 @@ use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 return static function (RoutingConfigurator $routingConfigurator): void {
     $routingConfigurator->add('billing_index', '/')
         ->controller(\SolidInvoice\SaasBundle\Controller\BillingController::class);
+
     $routingConfigurator->add('saas_payment_success', '/payment/success')
+        ->controller(\SolidInvoice\SaasBundle\Controller\PaymentSuccess::class);
+
+    $routingConfigurator->add('saas_subscription_checkout', '/subscription/activate')
         ->controller(\SolidInvoice\SaasBundle\Controller\PaymentSuccess::class);
 };

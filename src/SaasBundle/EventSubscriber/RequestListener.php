@@ -18,7 +18,6 @@ use SolidInvoice\CoreBundle\Repository\CompanyRepository;
 use SolidInvoice\UserBundle\Entity\User;
 use SolidWorx\Platform\SaasBundle\Entity\Subscription;
 use SolidWorx\Platform\SaasBundle\Enum\SubscriptionStatus;
-use SolidWorx\Platform\SaasBundle\Integration\Options;
 use SolidWorx\Platform\SaasBundle\Subscription\SubscriptionManager;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -26,6 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Uid\Ulid;
 use Twig\Environment;
 use function assert;
@@ -56,6 +56,7 @@ final readonly class RequestListener implements EventSubscriberInterface
         private SubscriptionManager $subscriptionManager,
         private Environment $twig,
         private Security $security,
+        private UrlGeneratorInterface $urlGenerator,
     ) {
     }
 
@@ -79,12 +80,10 @@ final readonly class RequestListener implements EventSubscriberInterface
                 $user = $this->security->getUser();
                 assert($user instanceof User);
 
-                $checkoutUrl = $this->subscriptionManager->getCheckoutUrl($subscription, Options::new()->withEmail($user->getEmail())->withSkipTrial(true));
                 $event->setResponse(
                     new Response(
                         $this->twig->render('@SolidInvoiceSaas/subscription/pending.html.twig', [
                             'subscription' => $subscription,
-                            'checkoutUrl' => $checkoutUrl,
                         ]),
                     )
                 );
@@ -98,12 +97,10 @@ final readonly class RequestListener implements EventSubscriberInterface
                 $user = $this->security->getUser();
                 assert($user instanceof User);
 
-                $checkoutUrl = $this->subscriptionManager->getCheckoutUrl($subscription, Options::new()->withEmail($user->getEmail())->withSkipTrial(true));
                 $event->setResponse(
                     new Response(
                         $this->twig->render('@SolidInvoiceSaas/subscription/cancelled.html.twig', [
                             'subscription' => $subscription,
-                            'checkoutUrl' => $checkoutUrl,
                         ]),
                     )
                 );
@@ -134,15 +131,7 @@ final readonly class RequestListener implements EventSubscriberInterface
 
         $content = $response->getContent();
 
-        $session = $request->getSession();
-
-        if ($session->has('checkout_url')) {
-            $checkoutUrl = $session->get('checkout_url');
-        } else {
-            // @TODO: If status is trial, and we want to allow the trial to be extended, skipTrial should be false.
-            $checkoutUrl = $this->subscriptionManager->getCheckoutUrl($subscription, Options::new()->withEmail($user->getEmail())->withSkipTrial(true));
-            $session->set('checkout_url', $checkoutUrl);
-        }
+        $checkoutUrl = $this->urlGenerator->generate('saas_subscription_checkout');
 
         $message = match ($subscription->getStatus()) {
             SubscriptionStatus::CANCELLED => '<strong>Subscription Canceled</strong> - Your subscription has been canceled. Your access will be revoked on ' . $subscription->getEndDate()->format('Y-m-d H:i:s') . '.<br /><a href="' . $checkoutUrl . '" class="btn btn-default btn-sm">Renew now</a> to avoid losing access.',
