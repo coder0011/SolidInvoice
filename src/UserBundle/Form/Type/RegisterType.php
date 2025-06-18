@@ -44,9 +44,6 @@ final class RegisterType extends AbstractType
             ];
         }
 
-        $builder->add('firstName');
-        $builder->add('lastName');
-
         $builder->add('email', EmailType::class, $emailOptions);
         $builder->add('company', null, [
             'required' => true,
