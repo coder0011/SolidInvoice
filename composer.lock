@@ -8648,12 +8648,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SolidWorx/platform.git",
-                "reference": "109bee170900baee11a58418d99a153ca76ffeb1"
+                "reference": "858567629f5fc0414ef478494beef5531f35db66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SolidWorx/platform/zipball/109bee170900baee11a58418d99a153ca76ffeb1",
-                "reference": "109bee170900baee11a58418d99a153ca76ffeb1",
+                "url": "https://api.github.com/repos/SolidWorx/platform/zipball/858567629f5fc0414ef478494beef5531f35db66",
+                "reference": "858567629f5fc0414ef478494beef5531f35db66",
                 "shasum": ""
             },
             "require": {
@@ -8694,7 +8694,7 @@
                 "phpstan/phpstan-phpunit": "^1.4",
                 "phpstan/phpstan-strict-rules": "^1.6",
                 "phpstan/phpstan-symfony": "^1.4",
-                "phpunit/phpunit": "^12.2",
+                "phpunit/phpunit": "^12.3",
                 "rector/rector": "^1.2",
                 "roave/security-advisories": "dev-latest",
                 "spatie/phpunit-snapshot-assertions": "^5.2",
@@ -8722,7 +8722,7 @@
                 "issues": "https://github.com/SolidWorx/platform/issues",
                 "source": "https://github.com/SolidWorx/platform/tree/main"
             },
-            "time": "2025-06-30T10:28:27+00:00"
+            "time": "2025-08-10T16:24:00+00:00"
         },
         {
             "name": "solidworx/toggler",
